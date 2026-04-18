@@ -1,0 +1,17 @@
+{
+  "name": "wrl-glb-tools",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "convert": "node scripts/convert-wrl-to-glb.mjs",
+    "serve": "npx --yes serve . -l 5173"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "VRML→GLB конвертер и локальный веб-просмотрщик (three.js)",
+  "dependencies": {
+    "three": "^0.160.0"
+  }
+}
