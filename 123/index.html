@@ -1,124 +1,14 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Viewer</title>
     <style>
-        body { margin: 0; overflow: hidden; font-family: Arial, Helvetica, sans-serif; }
-        #info {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: white;
-            background: rgba(0,0,0,0.6);
-            padding: 8px 16px;
-            border-radius: 20px;
-            pointer-events: none;
-            z-index: 100;
-        }
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+        iframe { width: 100%; height: 100%; border: 0; }
     </style>
 </head>
 <body>
-    <div id="info">🖱️ Вращайте мышью • Колёсико — зум</div>
-
-    <!-- Подключаем Three.js и аддоны -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
-            }
-        }
-    </script>
-
-    <script type="module">
-        import * as THREE from 'three';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-
-        // Сцена, камера, рендер
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x2a2d32);
-
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(200, 200, 200);
-        camera.lookAt(0, 0, 0);
-
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        document.body.appendChild(renderer.domElement);
-
-        // Освещение
-        const ambientLight = new THREE.AmbientLight(0x404060);
-        scene.add(ambientLight);
-        
-        const dirLight1 = new THREE.DirectionalLight(0xffffff, 1);
-        dirLight1.position.set(1, 2, 1);
-        scene.add(dirLight1);
-        
-        const dirLight2 = new THREE.DirectionalLight(0xffeedd, 0.5);
-        dirLight2.position.set(-1, 1, -1);
-        scene.add(dirLight2);
-
-        // Вспомогательная сетка и оси (для понимания масштаба)
-        const gridHelper = new THREE.GridHelper(500, 20, 0x888888, 0x444444);
-        scene.add(gridHelper);
-        const axesHelper = new THREE.AxesHelper(200);
-        scene.add(axesHelper);
-
-        // Управление
-        const controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.autoRotate = true;
-        controls.autoRotateSpeed = 2.0;
-        controls.enableZoom = true;
-        controls.enablePan = true;
-
-        // Загрузчик OBJ
-        const loader = new OBJLoader();
-        const modelUrl = 'https://raw.githubusercontent.com/roman4eg15426378-oss/ksb1342/refs/heads/main/11111.obj';
-        
-        loader.load(
-            modelUrl,
-            (object) => {
-                // Центрируем и масштабируем
-                const box = new THREE.Box3().setFromObject(object);
-                const center = box.getCenter(new THREE.Vector3());
-                const size = box.getSize(new THREE.Vector3());
-                const maxDim = Math.max(size.x, size.y, size.z);
-                const scale = 100 / maxDim;
-                object.scale.setScalar(scale);
-                object.position.sub(center.multiplyScalar(scale));
-                
-                scene.add(object);
-                console.log('✅ Модель загружена!');
-            },
-            (xhr) => {
-                console.log(`Загрузка: ${(xhr.loaded / xhr.total * 100).toFixed(0)}%`);
-            },
-            (error) => {
-                console.error('❌ Ошибка загрузки модели:', error);
-                document.getElementById('info').innerHTML = '⚠️ Ошибка загрузки модели. Проверьте консоль (F12).';
-            }
-        );
-
-        // Анимация
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        // Ресайз
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
+    <iframe src="https://3dviewer.net/embed.html#model=https://raw.githubusercontent.com/roman4eg15426378-oss/ksb1342/refs/heads/main/11111.obj&type=obj&camera=auto&projectionmode=Perspective&envsettings=fishermans_bastion,off&backgroundcolor=42,43,46,255"></iframe>
 </body>
 </html>
